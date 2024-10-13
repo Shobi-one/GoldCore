@@ -125,4 +125,5 @@ public class PickupScript : MonoBehaviour
             playerIsStandingOnObject = false;
         }
     }
+
 }
