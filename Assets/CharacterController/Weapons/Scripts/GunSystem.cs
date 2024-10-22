@@ -16,6 +16,10 @@ public class GunSystem : MonoBehaviour
     public int magazineBackup;
     public bool allowButtonHold;
 
+    // New Burst Fire Settings
+    public bool isBurstFire;
+    public int burstCount = 3; // Number of bullets to fire in a burst
+
     [Header("Shotgun Settings")]
     public float shotgunSpread;
     public int shotgunPellets = 5;
@@ -72,8 +76,31 @@ public class GunSystem : MonoBehaviour
 
         if (ableToShoot && shooting)
         {
-            bulletsShot = bulletsPerTap;
-            Shoot();
+            if (isBurstFire)
+            {
+                StartCoroutine(BurstFire());
+            }
+            else
+            {
+                bulletsShot = bulletsPerTap;
+                Shoot();
+            }
+        }
+    }
+
+    private IEnumerator BurstFire()
+    {
+        for (int i = 0; i < burstCount; i++)
+        {
+            if (ableToShoot)
+            {
+                Shoot();
+                yield return new WaitForSeconds(timeBetweenShots); // Wait between each shot in the burst
+            }
+            else
+            {
+                break; // Stop if we can't shoot anymore
+            }
         }
     }
 
@@ -167,6 +194,27 @@ public class GunSystem : MonoBehaviour
         Color magColor = bulletsLeft > 0 ? new Color32(251, 218, 85, 255) : Color.red;
         currentMagText.color = magColor;
         hudImage.color = bulletsLeft > 0 ? Color.white : Color.red;
+
+        // Show/hide settings based on gun type
+        ShowGunTypeSettings();
+    }
+
+    private void ShowGunTypeSettings()
+    {
+        // You can implement UI logic here based on the selected gun type
+        // For example:
+        if (gunType == GunType.Shotgun)
+        {
+            // Show shotgun-specific settings in the UI
+        }
+        else if (gunType == GunType.Rifle)
+        {
+            // Show rifle-specific settings in the UI
+        }
+        else if (gunType == GunType.Pistol)
+        {
+            // Show pistol-specific settings in the UI
+        }
     }
 
     private void SetupGunInInventory(bool inInventory)
@@ -183,14 +231,14 @@ public class GunSystem : MonoBehaviour
     }
 
     private void ApplyWeaponSway()
-{
-    float mouseX = Input.GetAxis("Mouse X");
-    float mouseY = Input.GetAxis("Mouse Y");
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
 
-    // Calculate target position based on mouse movement
-    Vector3 targetPosition = initialGunPosition + new Vector3(-mouseX * swayAmount, -mouseY * swayAmount, 0);
-    
-    // Smoothly move the gun's position
-    gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPosition, Time.deltaTime * swaySmoothness);
-}
+        // Calculate target position based on mouse movement
+        Vector3 targetPosition = initialGunPosition + new Vector3(-mouseX * swayAmount, -mouseY * swayAmount, 0);
+        
+        // Smoothly move the gun's position
+        gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPosition, Time.deltaTime * swaySmoothness);
+    }
 }
