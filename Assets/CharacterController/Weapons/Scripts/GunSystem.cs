@@ -36,18 +36,29 @@ public class GunSystem : MonoBehaviour
     private bool shooting, readyToShoot, reloading;
     private bool ableToShoot => bulletsLeft > 0 && readyToShoot && !reloading;
 
+    [Header("Weapon Sway Settings")]
+    public float swayAmount = 0.02f;
+    public float swaySmoothness = 5f;
+    public float swayRotationAmount = 4f;
+
+    private Vector3 initialGunPosition;
+    private Vector3 initialGunRotation;
+
     private void Awake()
     {
         fpsCam = Camera.main.transform;
         SetupGunInInventory(false);
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        initialGunPosition = gun.transform.localPosition;
+        initialGunRotation = gun.transform.localEulerAngles;
     }
 
     private void Update()
     {
         HandleInput();
         UpdateUI();
+        ApplyWeaponSway();
     }
 
     private void HandleInput()
@@ -170,4 +181,16 @@ public class GunSystem : MonoBehaviour
     {
         magazineBackup += amount;
     }
+
+    private void ApplyWeaponSway()
+{
+    float mouseX = Input.GetAxis("Mouse X");
+    float mouseY = Input.GetAxis("Mouse Y");
+
+    // Calculate target position based on mouse movement
+    Vector3 targetPosition = initialGunPosition + new Vector3(-mouseX * swayAmount, -mouseY * swayAmount, 0);
+    
+    // Smoothly move the gun's position
+    gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPosition, Time.deltaTime * swaySmoothness);
+}
 }
