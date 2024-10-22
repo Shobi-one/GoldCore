@@ -16,7 +16,7 @@ public class GunSystem : MonoBehaviour
     public int magazineBackup;
     public bool allowButtonHold;
 
-    // New Burst Fire Settings
+
     public bool isBurstFire;
     public int burstCount = 3; // Number of bullets to fire in a burst
 
@@ -129,7 +129,8 @@ public class GunSystem : MonoBehaviour
         {
             ApplyHitEffects(hit);
         }
-        Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
+        GameObject muzzleFlashInstance = Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
+        Destroy(muzzleFlashInstance, 0.05f); // Destroy after 0.05 seconds
     }
 
     private void ShootShotgun()
@@ -143,7 +144,8 @@ public class GunSystem : MonoBehaviour
                 ApplyHitEffects(hit);
             }
         }
-        Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
+        GameObject muzzleFlashInstance = Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
+        Destroy(muzzleFlashInstance, 0.05f);
     }
 
     private void ApplyHitEffects(RaycastHit hit)
@@ -162,9 +164,11 @@ public class GunSystem : MonoBehaviour
 
     private void CreateDecal(GameObject decalPrefab, RaycastHit hit)
     {
-        GameObject decal = Instantiate(decalPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+        Vector3 offset = hit.normal * 0.01f;
+        GameObject decal = Instantiate(decalPrefab, hit.point + offset, Quaternion.LookRotation(hit.normal));
         decal.transform.SetParent(hit.transform);
-        Destroy(decal, 3f);  // Auto destroy after 3 seconds
+    
+        Destroy(decal, 3f);
     }
 
     private IEnumerator ResetShoot()
