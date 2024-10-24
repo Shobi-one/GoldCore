@@ -4,25 +4,34 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
+[RequireComponent(typeof(AudioSource))]
 public class GunSystem : MonoBehaviour
 {
     public enum GunType { Pistol, Shotgun, Rifle }
+    public enum FireMode { Hitscan, Projectile }
 
     [Header("Gun Settings")]
     public GunType gunType;
+    public FireMode fireMode = FireMode.Hitscan;  // Default to hitscan
     public int damage;
     public float timeBetweenShooting, range, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap = 1;
     public int magazineBackup;
     public bool allowButtonHold;
 
-
     public bool isBurstFire;
-    public int burstCount = 3; // Number of bullets to fire in a burst
+    public int burstCount = 3;
 
     [Header("Shotgun Settings")]
     public float shotgunSpread;
     public int shotgunPellets = 5;
+
+    [Header("Ballistics Settings")]
+    public GameObject projectilePrefab;
+    public float projectileInitialSpeed = 50f;
+    public float projectileGravity = 9.81f;
+    public float projectileDrag = 0.1f;
+    public float maxLifetime = 5f; 
 
     [Header("UI & Effects")]
     public TextMeshProUGUI currentMagText, backupMagText;
@@ -34,7 +43,8 @@ public class GunSystem : MonoBehaviour
     public GameObject gun;
     public Transform attackPoint;
     public AudioSource gunSound;
-    private Transform fpsCam;
+
+    [SerializeField] private Transform fpsCam;
 
     private int bulletsLeft, bulletsShot;
     private bool shooting, readyToShoot, reloading;
@@ -50,7 +60,7 @@ public class GunSystem : MonoBehaviour
 
     private void Awake()
     {
-        fpsCam = Camera.main.transform;
+        if (fpsCam == null) fpsCam = Camera.main.transform; // Ensure the camera is assigned
         SetupGunInInventory(false);
         bulletsLeft = magazineSize;
         readyToShoot = true;
@@ -115,22 +125,48 @@ public class GunSystem : MonoBehaviour
         }
         else
         {
-            ShootBullet();
+            if (fireMode == FireMode.Hitscan)
+            {
+                ShootHitscan();
+            }
+            else if (fireMode == FireMode.Projectile)
+            {
+                ShootProjectileWithBallistics();
+            }
         }
 
         bulletsLeft--;
         StartCoroutine(ResetShoot());
     }
 
-    private void ShootBullet()
+    private void ShootHitscan()
     {
         Ray ray = new Ray(fpsCam.position, fpsCam.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, range))
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
             ApplyHitEffects(hit);
         }
         GameObject muzzleFlashInstance = Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
-        Destroy(muzzleFlashInstance, 0.05f); // Destroy after 0.05 seconds
+        Destroy(muzzleFlashInstance, 0.05f);
+    }
+
+    private void ShootProjectileWithBallistics()
+    {
+        GameObject projectileInstance = Instantiate(projectilePrefab, attackPoint.position, attackPoint.rotation);
+        Rigidbody rb = projectileInstance.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            Vector3 direction = fpsCam.forward;
+            rb.velocity = direction * projectileInitialSpeed;
+            rb.useGravity = false;
+
+            ProjectileBallistics ballistics = projectileInstance.AddComponent<ProjectileBallistics>();
+            ballistics.SetupBallistics(rb, projectileGravity, projectileDrag, maxLifetime);
+        }
+
+        GameObject muzzleFlashInstance = Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
+        Destroy(muzzleFlashInstance, 0.05f);
     }
 
     private void ShootShotgun()
@@ -244,5 +280,11 @@ public class GunSystem : MonoBehaviour
         
         // Smoothly move the gun's position
         gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPosition, Time.deltaTime * swaySmoothness);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Debug.Log("Gizmos Drawn"); // Just to ensure it's being called
+        Gizmos.DrawIcon(transform.position, "GunSystem.icon.png", true);
     }
 }
