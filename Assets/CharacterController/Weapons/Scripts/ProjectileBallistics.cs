@@ -21,10 +21,10 @@ public class ProjectileBallistics : MonoBehaviour
     private void FixedUpdate()
     {
         // Apply custom gravity
-        rb.velocity += Vector3.down * gravity * Time.fixedDeltaTime;
+        rb.linearVelocity += Vector3.down * gravity * Time.fixedDeltaTime;
 
         // Apply drag (simulates air resistance)
-        rb.velocity -= rb.velocity * drag * Time.fixedDeltaTime;
+        rb.linearVelocity -= rb.linearVelocity * drag * Time.fixedDeltaTime;
 
         // Increase lifetime and destroy projectile after max lifetime
         currentLifetime += Time.fixedDeltaTime;

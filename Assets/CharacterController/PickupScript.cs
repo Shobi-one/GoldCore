@@ -86,7 +86,7 @@ public class PickupScript : MonoBehaviour
         // Reset object properties when releasing or dropping the object
         if (CurrentObject)
         {
-            CurrentObject.velocity = Vector3.zero;
+            CurrentObject.linearVelocity = Vector3.zero;
             CurrentObject.angularVelocity = Vector3.zero;
             CurrentObject.freezeRotation = false;
             CurrentObject.useGravity = true;
@@ -112,10 +112,10 @@ public class PickupScript : MonoBehaviour
             Vector3 forceToApply = DirectionToPoint * springConstant * Time.fixedDeltaTime;
 
             // Add the force and apply damping to the velocity to avoid oscillation
-            CurrentObject.velocity = (CurrentObject.velocity + forceToApply) * dampingFactor;
+            CurrentObject.linearVelocity = (CurrentObject.linearVelocity + forceToApply) * dampingFactor;
 
             // Apply a limit to prevent too much velocity
-            CurrentObject.velocity = Vector3.ClampMagnitude(CurrentObject.velocity, 100f); // Adjust max speed
+            CurrentObject.linearVelocity = Vector3.ClampMagnitude(CurrentObject.linearVelocity, 100f); // Adjust max speed
 
             // Align rotation smoothly
             AlignToPlayer();

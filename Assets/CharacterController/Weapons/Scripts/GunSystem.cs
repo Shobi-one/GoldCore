@@ -13,14 +13,15 @@ public class GunSystem : MonoBehaviour
     [Header("Gun Settings")]
     public GunType gunType;
     public FireMode fireMode = FireMode.Hitscan;  // Default to hitscan
+    public bool autoReload = true;
     public int damage;
     public float timeBetweenShooting, range, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap = 1;
     public int magazineBackup;
     public bool allowButtonHold;
-
     public bool isBurstFire;
     public int burstCount = 3;
+    public float bulletSpread = 0.05f;
 
     [Header("Shotgun Settings")]
     public float shotgunSpread;
@@ -31,13 +32,14 @@ public class GunSystem : MonoBehaviour
     public float projectileInitialSpeed = 50f;
     public float projectileGravity = 9.81f;
     public float projectileDrag = 0.1f;
-    public float maxLifetime = 5f; 
+    public float maxLifetime = 5f;
 
     [Header("UI & Effects")]
     public TextMeshProUGUI currentMagText, backupMagText;
     public Image hudImage;
     public GameObject muzzleFlash, bulletHoleGraphic, bloodDecalPrefab;
     public float camShakeMagnitude, camShakeDuration;
+
 
     [Header("References")]
     public GameObject gun;
@@ -73,8 +75,12 @@ public class GunSystem : MonoBehaviour
         HandleInput();
         UpdateUI();
         ApplyWeaponSway();
-    }
 
+        if (autoReload && bulletsLeft == 0 && !reloading && magazineBackup > 0)
+        {
+            StartCoroutine(Reload());
+        }
+    }
     private void HandleInput()
     {
         shooting = allowButtonHold ? Input.GetButton("Fire1") : Input.GetButtonDown("Fire1");
@@ -141,11 +147,13 @@ public class GunSystem : MonoBehaviour
 
     private void ShootHitscan()
     {
-        Ray ray = new Ray(fpsCam.position, fpsCam.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        Vector3 directionWithSpread = ApplySpread(fpsCam.forward, bulletSpread);
+        Ray ray = new Ray(fpsCam.position, directionWithSpread);
+        if (Physics.Raycast(ray, out RaycastHit hit, range))
         {
             ApplyHitEffects(hit);
         }
+
         GameObject muzzleFlashInstance = Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
         Destroy(muzzleFlashInstance, 0.05f);
     }
@@ -157,8 +165,8 @@ public class GunSystem : MonoBehaviour
 
         if (rb != null)
         {
-            Vector3 direction = fpsCam.forward;
-            rb.velocity = direction * projectileInitialSpeed;
+            Vector3 directionWithSpread = ApplySpread(fpsCam.forward, bulletSpread);
+            rb.linearVelocity = directionWithSpread * projectileInitialSpeed;
             rb.useGravity = false;
 
             ProjectileBallistics ballistics = projectileInstance.AddComponent<ProjectileBallistics>();
@@ -167,6 +175,13 @@ public class GunSystem : MonoBehaviour
 
         GameObject muzzleFlashInstance = Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation);
         Destroy(muzzleFlashInstance, 0.05f);
+    }
+
+    private Vector3 ApplySpread(Vector3 direction, float spread)
+    {
+        // Calculate a spread angle by applying a random offset
+        direction += Random.insideUnitSphere * spread;
+        return direction.normalized;
     }
 
     private void ShootShotgun()
@@ -203,7 +218,7 @@ public class GunSystem : MonoBehaviour
         Vector3 offset = hit.normal * 0.01f;
         GameObject decal = Instantiate(decalPrefab, hit.point + offset, Quaternion.LookRotation(hit.normal));
         decal.transform.SetParent(hit.transform);
-    
+
         Destroy(decal, 3f);
     }
 
@@ -233,6 +248,7 @@ public class GunSystem : MonoBehaviour
         // Color indicators based on ammo
         Color magColor = bulletsLeft > 0 ? new Color32(251, 218, 85, 255) : Color.red;
         currentMagText.color = magColor;
+        backupMagText.color = magColor;
         hudImage.color = bulletsLeft > 0 ? Color.white : Color.red;
 
         // Show/hide settings based on gun type
@@ -277,14 +293,13 @@ public class GunSystem : MonoBehaviour
 
         // Calculate target position based on mouse movement
         Vector3 targetPosition = initialGunPosition + new Vector3(-mouseX * swayAmount, -mouseY * swayAmount, 0);
-        
+
         // Smoothly move the gun's position
         gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPosition, Time.deltaTime * swaySmoothness);
     }
 
     private void OnDrawGizmos()
     {
-        Debug.Log("Gizmos Drawn"); // Just to ensure it's being called
         Gizmos.DrawIcon(transform.position, "GunSystem.icon.png", true);
     }
 }

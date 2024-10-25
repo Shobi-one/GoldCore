@@ -157,8 +157,8 @@ namespace Fragsurf.Movement {
 
             rb.isKinematic = true;
             rb.useGravity = false;
-            rb.angularDrag = 0f;
-            rb.drag = 0f;
+            rb.angularDamping = 0f;
+            rb.linearDamping = 0f;
             rb.mass = weight;
 
 
