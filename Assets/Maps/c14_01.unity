@@ -1361,18 +1361,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1165751033, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
-      objectReference: {fileID: 0}
-    - target: {fileID: 1165751033, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: customRes.x
-      value: 199
-      objectReference: {fileID: 0}
-    - target: {fileID: 1165751033, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: customRes.y
-      value: 304
-      objectReference: {fileID: 0}
     - target: {fileID: 1045385777452902004, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1428,18 +1416,6 @@ PrefabInstance:
     - target: {fileID: 5315947487396088901, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315947488906512252, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315947488906512252, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: customRes.x
-      value: 199
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315947488906512252, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: customRes.y
-      value: 304
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}

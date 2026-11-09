@@ -7430,10 +7430,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1619266853267306286, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
-      objectReference: {fileID: 0}
     - target: {fileID: 1619266853907414032, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
       propertyPath: m_Name
       value: Player
@@ -7493,10 +7489,6 @@ PrefabInstance:
     - target: {fileID: 6005189506850627249, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899163389056189099, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
       objectReference: {fileID: 0}
     - target: {fileID: 6899163390997175618, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'

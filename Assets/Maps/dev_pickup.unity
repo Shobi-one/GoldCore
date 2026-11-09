@@ -379,10 +379,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1619266853267306286, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
-      objectReference: {fileID: 0}
     - target: {fileID: 1619266853907414032, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
       propertyPath: m_Name
       value: Player
@@ -430,10 +426,6 @@ PrefabInstance:
     - target: {fileID: 1619266853907414039, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899163389056189099, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb68a0792bd52b148a61dd9de0b9cc38, type: 3}

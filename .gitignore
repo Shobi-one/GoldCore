@@ -1,41 +1,51 @@
-###
-# Unity folders and files
-###
-[Aa]ssets/AssetStoreTools*
-[Bb]uild/
-[Ll]ibrary/
-[Ll]ocal[Cc]ache/
-[Oo]bj/
-[Tt]emp/
-[Uu]nityGenerated/
-# file on crash reports
+# Unity generated
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Aa]ssets/AssetStoreTools*
+/[Aa]ssets/Plugins/Editor/JetBrains*
 sysinfo.txt
-# Unity3D generated meta files
 *.pidb.meta
+*.pdb.meta
+*.mdb.meta
+crashlytics-build.properties
 
-###
-# VS/MD solution and project files
-###
-[Ee]xportedObj/
-*.booproj
+# Paid Asset Store packages: never commit these, this repository is public.
+# Import them from the Asset Store on your own machine.
+/[Aa]ssets/PSXEffects/
+/[Aa]ssets/PSXEffects.meta
+
+# IDE and solution files
+.vs/
+.idea/
+.gradle/
 *.csproj
+*.unityproj
 *.sln
 *.suo
-*.svd
-*.unityproj
+*.tmp
 *.user
 *.userprefs
 *.pidb
-.DS_Store
+*.booproj
+*.svd
+*.opendb
+*.VC.db
+ExportedObj/
+.consulo/
 
-###
-# OS generated
-###
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
 Thumbs.db

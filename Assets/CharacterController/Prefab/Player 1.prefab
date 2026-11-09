@@ -792,42 +792,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 3427825433683461874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b416fbce5a38cc47a3a1e709f95f5e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b7ab1c00e9f470a9c095a8fa4e965ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cfuStatus: PSXEffects v1.18.4 - version ahead?!
-  sections: 01010101
-  customRes: {x: 960, y: 540}
-  resolutionFactor: 2
-  limitFramerate: 999
-  skipFrames: 1
-  affineMapping: 0
-  clampAffine: 0
-  affineBounds: 0
-  polygonalDrawDistance: 0
-  vertexInaccuracy: 40
-  polygonInaccuracy: 0
-  colorDepth: 20
-  scanlines: 0
-  scanlineIntensity: 0
-  ditherTexture: {fileID: 0}
-  dithering: 0
-  ditherThreshold: 1
-  ditherIntensity: 5
-  maxDarkness: 20
-  subtractFade: 0
-  favorRed: 1
-  worldSpaceSnapping: 1
-  postProcessing: 0
-  verticalScanlines: 0
-  shadowIntensity: 0.5
-  downscale: 1
-  snapCamera: 0
-  camInaccuracy: 0.05
-  camSnapping: 1
-  shadowType: 1
-  ditherSky: 1
-  ditherType: 0
+  preset: {fileID: 11400000, guid: 1d84ca4dad014231b9b66befa41eb225, type: 2}
+  postProcess: 0
+  cyclePresets:
+  - {fileID: 11400000, guid: 1d84ca4dad014231b9b66befa41eb225, type: 2}
+  - {fileID: 11400000, guid: 2b8ab371030849dfbb3e3721192cedef, type: 2}
+  - {fileID: 11400000, guid: 21df166e1d544480b5bbec28d7ca1fb0, type: 2}
+  - {fileID: 11400000, guid: f15193338d60478693f111c89489cf9f, type: 2}
+  cycleKey: 0
+  targetFrameRate: -1
 --- !u!1 &4616159994599051213
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,42 +1979,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 9000706439967870571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b416fbce5a38cc47a3a1e709f95f5e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b7ab1c00e9f470a9c095a8fa4e965ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cfuStatus: PSXEffects v1.18.4 - version ahead?!
-  sections: 01010101
-  customRes: {x: 960, y: 540}
-  resolutionFactor: 1
-  limitFramerate: 144
-  skipFrames: 1
-  affineMapping: 0
-  clampAffine: 0
-  affineBounds: 0
-  polygonalDrawDistance: 0
-  vertexInaccuracy: 40
-  polygonInaccuracy: 0
-  colorDepth: 8
-  scanlines: 0
-  scanlineIntensity: 0
-  ditherTexture: {fileID: 0}
-  dithering: 0
-  ditherThreshold: 1
-  ditherIntensity: 2
-  maxDarkness: 20
-  subtractFade: 4
-  favorRed: 1
-  worldSpaceSnapping: 1
-  postProcessing: 1
-  verticalScanlines: 0
-  shadowIntensity: 0.5
-  downscale: 1
-  snapCamera: 0
-  camInaccuracy: 0.05
-  camSnapping: 1
-  shadowType: 1
-  ditherSky: 1
-  ditherType: 0
+  preset: {fileID: 11400000, guid: 1d84ca4dad014231b9b66befa41eb225, type: 2}
+  postProcess: 1
+  cyclePresets:
+  - {fileID: 11400000, guid: 1d84ca4dad014231b9b66befa41eb225, type: 2}
+  - {fileID: 11400000, guid: 2b8ab371030849dfbb3e3721192cedef, type: 2}
+  - {fileID: 11400000, guid: 21df166e1d544480b5bbec28d7ca1fb0, type: 2}
+  - {fileID: 11400000, guid: f15193338d60478693f111c89489cf9f, type: 2}
+  cycleKey: 289
+  targetFrameRate: 144
 --- !u!1001 &1037989318033448554
 PrefabInstance:
   m_ObjectHideFlags: 0
