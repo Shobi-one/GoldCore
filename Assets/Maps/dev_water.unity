@@ -434,18 +434,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5315947488906512252, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: cfuStatus
-      value: Checking for updates...
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315947488906512252, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: customRes.x
-      value: 478
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315947488906512252, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
-      propertyPath: customRes.y
-      value: 715
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89f8ec4a0cf21c243a85a4ee30807b22, type: 3}
 --- !u!1 &1551289931

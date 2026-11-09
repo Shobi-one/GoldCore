@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03529788aa43442db3a96eec49023a83, type: 3}
+  m_Name: PS1
+  m_EditorClassIdentifier: 
+  verticalResolution: 240
+  pixelatedUpscale: 1
+  colorBits: 5
+  dither: 1
+  warmShadows: 0.25
+  saturation: 1.1
+  blur: 0
+  bloom: 0
+  bloomThreshold: 0.75
+  fog: 0
+  fogColor: {r: 0.55, g: 0.6, b: 0.7, a: 1}
+  fogStart: 15
+  fogEnd: 60
+  scanlines: 0
+  vertexSnap: 120
+  affineTextures: 1
+  pointSampleTextures: 1
