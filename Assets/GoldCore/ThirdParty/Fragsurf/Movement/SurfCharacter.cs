@@ -265,7 +265,7 @@ namespace Fragsurf.Movement {
         
         private void UpdateTestBinds () {
 
-            if (Input.GetKeyDown (KeyCode.Backspace))
+            if (GoldCore.GameInput.ResetPositionPressed)
                 ResetPosition ();
 
         }
@@ -279,22 +279,23 @@ namespace Fragsurf.Movement {
 
         private void UpdateMoveData () {
             
-            _moveData.verticalAxis = Input.GetAxisRaw ("Vertical");
-            _moveData.horizontalAxis = Input.GetAxisRaw ("Horizontal");
+            Vector2 moveInput = GoldCore.GameInput.Move;
+            _moveData.verticalAxis = moveInput.y;
+            _moveData.horizontalAxis = moveInput.x;
 
-            _moveData.sprinting = Input.GetButton ("Sprint");
+            _moveData.sprinting = GoldCore.GameInput.SprintHeld;
             
-            if (Input.GetButtonDown ("Crouch"))
+            if (GoldCore.GameInput.CrouchPressed)
                 _moveData.crouching = true;
 
-            if (!Input.GetButton ("Crouch"))
+            if (!GoldCore.GameInput.CrouchHeld)
                 _moveData.crouching = false;
             
             bool moveLeft = _moveData.horizontalAxis < 0f;
             bool moveRight = _moveData.horizontalAxis > 0f;
             bool moveFwd = _moveData.verticalAxis > 0f;
             bool moveBack = _moveData.verticalAxis < 0f;
-            bool jump = Input.GetButton ("Jump");
+            bool jump = GoldCore.GameInput.JumpHeld;
 
             if (!moveLeft && !moveRight)
                 _moveData.sideMove = 0f;
@@ -310,10 +311,10 @@ namespace Fragsurf.Movement {
             else if (moveBack)
                 _moveData.forwardMove = -moveConfig.acceleration;
             
-            if (Input.GetButtonDown ("Jump"))
+            if (GoldCore.GameInput.JumpPressed)
                 _moveData.wishJump = true;
 
-            if (!Input.GetButton ("Jump"))
+            if (!GoldCore.GameInput.JumpHeld)
                 _moveData.wishJump = false;
             
             _moveData.viewAngles = _angles;

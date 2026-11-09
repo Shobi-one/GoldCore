@@ -1,13 +1,15 @@
 # RetroFX
 
-GoldCore's own retro look, replacing the paid PSXEffects asset. It is built for the built-in
-render pipeline, which is what GoldCore uses.
+GoldCore's own retro look, replacing the paid PSXEffects asset. It works on URP (through the
+`RetroFXFeature` renderer feature) and on the built-in render pipeline (through `OnRenderImage`).
 
 ## Setup
 
-1. Add **RetroCamera** to a camera (the Player prefab's main camera already has it).
-2. Drag a preset from `Assets/GoldCore/RetroFX/Presets` into **Preset**.
-3. For wobbling vertices and warped textures, switch materials to **GoldCore/RetroLit**:
+1. On URP, run **Tools > GoldCore > Set Up URP** once. It adds the RetroFX feature to your URP renderers.
+   On the built-in pipeline there's nothing to set up.
+2. Add **RetroCamera** to a camera (the Player prefab's main camera already has it).
+3. Drag a preset from `Assets/GoldCore/RetroFX/Presets` into **Preset**.
+4. For wobbling vertices and warped textures, switch materials to **GoldCore/RetroLit**:
    select them and use **Tools > GoldCore > Convert Selected Materials to RetroLit**.
    The image effects (resolution, color, dithering, fog, blur, bloom, scanlines) work on every material.
 
@@ -41,3 +43,12 @@ Switch at runtime with `GetComponent<RetroCamera>().SetPreset(preset)`, or press
 - **Scanlines**: darkens every other low resolution row.
 - **Vertex Snap**, **Affine Textures**, **Point Sample Textures**: RetroLit materials only.
   A material's **Vertex Snap Override** replaces the preset's value for that material.
+
+## URP notes
+
+- RetroLit has a URP version of every pass (lit, shadow caster, depth, depth normals), so the vertex
+  snapping also lines up with URP's depth prepass.
+- Additional lights are lit per vertex on the **Forward** rendering path. On **Forward+** RetroLit uses
+  the main light and ambient only.
+- The feature runs after URP's post-processing by default. Change **Pass Event** on the feature to
+  run it before.

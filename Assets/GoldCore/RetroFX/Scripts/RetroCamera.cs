@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GoldCore.RetroFX
 {
@@ -58,14 +59,28 @@ namespace GoldCore.RetroFX
             SetPreset(cyclePresets[next]);
         }
 
+        static readonly System.Collections.Generic.Dictionary<Camera, RetroCamera> byCamera =
+            new System.Collections.Generic.Dictionary<Camera, RetroCamera>();
+
+        /// <summary>The RetroCamera on a camera, or null. Used by the URP renderer feature.</summary>
+        public static RetroCamera For(Camera camera) =>
+            camera != null && byCamera.TryGetValue(camera, out RetroCamera retro) ? retro : null;
+
         void OnEnable()
         {
             cam = GetComponent<Camera>();
+            byCamera[cam] = this;
             if (Application.isPlaying && targetFrameRate > 0) Application.targetFrameRate = targetFrameRate;
             ApplyGlobals();
         }
 
         void OnDisable()
+        {
+            if (cam != null && byCamera.TryGetValue(cam, out RetroCamera current) && current == this) byCamera.Remove(cam);
+            ClearGlobals();
+        }
+
+        static void ClearGlobals()
         {
             Shader.SetGlobalFloat(VertexSnapId, 0f);
             Shader.SetGlobalFloat(AffineId, 0f);
@@ -84,18 +99,28 @@ namespace GoldCore.RetroFX
 
         void Update()
         {
-            if (Application.isPlaying && cycleKey != KeyCode.None && Input.GetKeyDown(cycleKey)) NextPreset();
+            if (Application.isPlaying && CycleKeyPressed()) NextPreset();
 #if UNITY_EDITOR
             // Pick up edits made to the preset asset while it is in use.
             if (!Application.isPlaying) ApplyGlobals();
 #endif
         }
 
+        bool CycleKeyPressed()
+        {
+            Keyboard keyboard = Keyboard.current;
+            if (cycleKey == KeyCode.None || keyboard == null) return false;
+            string name = cycleKey.ToString();
+            if (name.StartsWith("Alpha")) name = "Digit" + name.Substring(5);
+            if (!System.Enum.TryParse(name, out Key key) || key == Key.None) return false;
+            return keyboard[key].wasPressedThisFrame;
+        }
+
         void ApplyGlobals()
         {
             if (preset == null)
             {
-                OnDisable();
+                ClearGlobals();
                 return;
             }
             Shader.SetGlobalFloat(VertexSnapId, preset.vertexSnap);
@@ -104,38 +129,54 @@ namespace GoldCore.RetroFX
             if (cam != null && preset.fog && postProcess) cam.depthTextureMode |= DepthTextureMode.Depth;
         }
 
+        /// <summary>True when this camera should draw the image effect this frame.</summary>
+        public bool WantsPostProcess => isActiveAndEnabled && postProcess && preset != null && !preset.IsPassthrough;
+
+        /// <summary>Size the effect renders at for a source of this size.</summary>
+        public Vector2Int TargetSize(int sourceWidth, int sourceHeight)
+        {
+            int height = preset != null && preset.verticalResolution > 0 ? Mathf.Min(preset.verticalResolution, sourceHeight) : sourceHeight;
+            int width = Mathf.Max(1, Mathf.RoundToInt(height * (float)sourceWidth / Mathf.Max(1, sourceHeight)));
+            return new Vector2Int(width, Mathf.Max(1, height));
+        }
+
+        /// <summary>Copies the preset into the post material. Used by both render pipelines.</summary>
+        public void ApplyPostSettings(Material material, Vector2Int target)
+        {
+            material.SetVector(TargetSizeId, new Vector4(target.x, target.y, 1f / target.x, 1f / target.y));
+            material.SetFloat(ColorStepsId, (1 << Mathf.Clamp(preset.colorBits, 1, 8)) - 1);
+            material.SetFloat(DitherId, preset.dither);
+            material.SetFloat(WarmShadowsId, preset.warmShadows);
+            material.SetFloat(SaturationId, preset.saturation);
+            material.SetFloat(BlurId, preset.blur);
+            material.SetFloat(BloomId, preset.bloom);
+            material.SetFloat(BloomThresholdId, preset.bloomThreshold);
+            material.SetFloat(ScanlinesId, preset.scanlines);
+            material.SetColor(FogColorId, preset.fogColor);
+            float fogEnd = Mathf.Max(preset.fogEnd, preset.fogStart + 0.01f);
+            material.SetVector(FogRangeId, new Vector4(preset.fog ? 1f : 0f, preset.fogStart, fogEnd, 0f));
+        }
+
+        // Built-in render pipeline path. URP uses RetroFXFeature instead and never calls this.
         void OnRenderImage(RenderTexture src, RenderTexture dst)
         {
-            if (!postProcess || preset == null || preset.IsPassthrough || !EnsureMaterial())
+            if (!WantsPostProcess || !EnsureMaterial())
             {
                 Graphics.Blit(src, dst);
                 return;
             }
 
-            int height = preset.verticalResolution > 0 ? Mathf.Min(preset.verticalResolution, src.height) : src.height;
-            int width = Mathf.Max(1, Mathf.RoundToInt(height * (float)src.width / src.height));
-
-            postMaterial.SetVector(TargetSizeId, new Vector4(width, height, 1f / width, 1f / height));
-            postMaterial.SetFloat(ColorStepsId, (1 << Mathf.Clamp(preset.colorBits, 1, 8)) - 1);
-            postMaterial.SetFloat(DitherId, preset.dither);
-            postMaterial.SetFloat(WarmShadowsId, preset.warmShadows);
-            postMaterial.SetFloat(SaturationId, preset.saturation);
-            postMaterial.SetFloat(BlurId, preset.blur);
-            postMaterial.SetFloat(BloomId, preset.bloom);
-            postMaterial.SetFloat(BloomThresholdId, preset.bloomThreshold);
-            postMaterial.SetFloat(ScanlinesId, preset.scanlines);
-            postMaterial.SetColor(FogColorId, preset.fogColor);
-            float fogEnd = Mathf.Max(preset.fogEnd, preset.fogStart + 0.01f);
-            postMaterial.SetVector(FogRangeId, new Vector4(preset.fog ? 1f : 0f, preset.fogStart, fogEnd, 0f));
+            Vector2Int target = TargetSize(src.width, src.height);
+            ApplyPostSettings(postMaterial, target);
             if (preset.fog) cam.depthTextureMode |= DepthTextureMode.Depth;
 
-            if (height == src.height)
+            if (target.y == src.height)
             {
                 Graphics.Blit(src, dst, postMaterial);
                 return;
             }
 
-            RenderTexture low = RenderTexture.GetTemporary(width, height, 0, src.format);
+            RenderTexture low = RenderTexture.GetTemporary(target.x, target.y, 0, src.format);
             low.filterMode = preset.pixelatedUpscale ? FilterMode.Point : FilterMode.Bilinear;
             Graphics.Blit(src, low, postMaterial);
             Graphics.Blit(low, dst);
