@@ -5,6 +5,9 @@ namespace GoldCore
     /// <summary>Explodes on contact, with damage that falls off over <see cref="blastRadius"/>.</summary>
     public class Rocket : MonoBehaviour
     {
+        [Tooltip("GoldCore effect played where the rocket hits. Plays its own flash, shake and sound.")]
+        public EffectPreset explosionEffect;
+        [Tooltip("Optional prefab spawned as well, for custom explosions.")]
         public GameObject explosionPrefab;
         public float explosionDuration = 3f;
 
@@ -19,6 +22,11 @@ namespace GoldCore
 
         void OnCollisionEnter(Collision collision)
         {
+            if (explosionEffect != null)
+            {
+                Vector3 normal = collision.contactCount > 0 ? collision.GetContact(0).normal : -transform.forward;
+                Effects.Play(explosionEffect, transform.position, Quaternion.LookRotation(normal));
+            }
             if (explosionPrefab != null)
                 Destroy(Instantiate(explosionPrefab, transform.position, transform.rotation), explosionDuration);
             if (blastDamage > 0f) Explode(transform.position);

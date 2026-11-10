@@ -20,6 +20,9 @@ crashlytics-build.properties
 # Import them from the Asset Store on your own machine.
 /[Aa]ssets/PSXEffects/
 /[Aa]ssets/PSXEffects.meta
+# Unity Particle Pack (Asset Store content, replaced by GoldCore Effects)
+/[Aa]ssets/UnityTechnologies/
+/[Aa]ssets/UnityTechnologies.meta
 
 # IDE and solution files
 .vs/

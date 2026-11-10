@@ -150,7 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 795195a99a66f1d49bebe7ca0c987e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPrefab: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  explosionEffect: {fileID: 11400000, guid: 5001cc5866984b5382fa31ce5448e6c5, type: 2}
+  explosionPrefab: {fileID: 0}
   explosionDuration: 1
 --- !u!1001 &7179911170024814746
 PrefabInstance:

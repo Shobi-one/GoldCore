@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e939b7472046e49cff71c4f93df38e, type: 3}
+  m_Name: Fire
+  m_EditorClassIdentifier: 
+  loop: 1
+  scale: 1
+  maxInstances: 8
+  layers:
+  - name: Flames
+    enabled: 1
+    shape: 0
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.7, b: 0.25, a: 1}
+    endColor: {r: 0.8, g: 0.15, b: 0, a: 0}
+    intensity: 2
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 0
+    rate: 30
+    delay: 0
+    lifetime:
+      min: 0.5
+      max: 0.9
+    speed:
+      min: 0.2
+      max: 0.5
+    size:
+      min: 0.3
+      max: 0.5
+    endSize: 0.3
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: -0.25
+    drag: 0
+    bounce: 0
+    emitter: 1
+    radius: 0.25
+    coneAngle: 25
+  - name: Embers
+    enabled: 1
+    shape: 4
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.6, b: 0.2, a: 1}
+    endColor: {r: 1, g: 0.3, b: 0, a: 0}
+    intensity: 3
+    pixelate: 0
+    stretch: 1
+    stretchAmount: 0.02
+    burst: 0
+    rate: 6
+    delay: 0
+    lifetime:
+      min: 1
+      max: 2
+    speed:
+      min: 0.5
+      max: 1.5
+    size:
+      min: 0.02
+      max: 0.04
+    endSize: 1
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: -0.15
+    drag: 0.5
+    bounce: 0
+    emitter: 1
+    radius: 0.3
+    coneAngle: 25
+  - name: Smoke
+    enabled: 1
+    shape: 3
+    blend: 1
+    texture: {fileID: 0}
+    startColor: {r: 0.15, g: 0.14, b: 0.13, a: 0.4}
+    endColor: {r: 0.3, g: 0.3, b: 0.3, a: 0}
+    intensity: 1
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 0
+    rate: 5
+    delay: 0.3
+    lifetime:
+      min: 2
+      max: 3
+    speed:
+      min: 0.2
+      max: 0.5
+    size:
+      min: 0.4
+      max: 0.6
+    endSize: 3
+    spin:
+      min: -20
+      max: 20
+    randomRotation: 1
+    gravity: -0.12
+    drag: 0
+    bounce: 0
+    emitter: 1
+    radius: 0.2
+    coneAngle: 25
+  flash: 0
+  flashColor: {r: 1, g: 0.7, b: 0.4, a: 1}
+  flashIntensity: 4
+  flashRange: 6
+  flashDuration: 0.15
+  shake: 0
+  shakeRadius: 15
+  sounds: []
+  volume: 1
+  pitch:
+    min: 0.95
+    max: 1.05
+  soundRange: 40

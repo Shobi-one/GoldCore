@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e939b7472046e49cff71c4f93df38e, type: 3}
+  m_Name: Sparks
+  m_EditorClassIdentifier: 
+  loop: 0
+  scale: 1
+  maxInstances: 24
+  layers:
+  - name: Flash
+    enabled: 1
+    shape: 0
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.9, b: 0.7, a: 1}
+    endColor: {r: 1, g: 0.6, b: 0.3, a: 0}
+    intensity: 3
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 1
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.05
+      max: 0.07
+    speed:
+      min: 0
+      max: 0
+    size:
+      min: 0.3
+      max: 0.4
+    endSize: 1
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: 0
+    drag: 0
+    bounce: 0
+    emitter: 0
+    radius: 0.1
+    coneAngle: 25
+  - name: Sparks
+    enabled: 1
+    shape: 4
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.85, b: 0.5, a: 1}
+    endColor: {r: 1, g: 0.35, b: 0.05, a: 0}
+    intensity: 3
+    pixelate: 0
+    stretch: 1
+    stretchAmount: 0.035
+    burst: 18
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.3
+      max: 0.7
+    speed:
+      min: 4
+      max: 10
+    size:
+      min: 0.02
+      max: 0.04
+    endSize: 1
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: 1
+    drag: 0.3
+    bounce: 1
+    emitter: 3
+    radius: 0.01
+    coneAngle: 50
+  flash: 1
+  flashColor: {r: 1, g: 0.8, b: 0.5, a: 1}
+  flashIntensity: 1.5
+  flashRange: 2
+  flashDuration: 0.06
+  shake: 0
+  shakeRadius: 15
+  sounds: []
+  volume: 1
+  pitch:
+    min: 0.95
+    max: 1.05
+  soundRange: 40
