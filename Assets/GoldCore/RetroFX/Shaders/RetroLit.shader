@@ -1,4 +1,4 @@
-// Vertex lit (Gouraud) material for the retro presets. It reads the globals RetroCamera sets:
+// Vertex lit (Gouraud) material for the retro presets, for URP and the built-in pipeline. It reads the globals RetroCamera sets:
 // vertex snapping, affine texture warping and point sampling. With the Modern preset, or no
 // RetroCamera at all, it is a plain vertex lit shader.
 Shader "GoldCore/RetroLit"
@@ -12,6 +12,204 @@ Shader "GoldCore/RetroLit"
         [Toggle(RETRO_UNLIT)] _Unlit ("Unlit", Float) = 0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 2
     }
+    // URP version: vertex lit like the built-in one below, with snapping and affine textures in every pass
+    // that writes depth, so depth priming and shadows line up with the wobbling geometry.
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "Queue" = "Geometry" "RenderPipeline" = "UniversalPipeline" }
+        Cull [_Cull]
+
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "RetroFX.cginc"
+
+        CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            float4 _MainTex_TexelSize;
+            half4 _Color;
+            half4 _EmissionColor;
+            float _VertexSnapOverride;
+        CBUFFER_END
+        TEXTURE2D(_MainTex);
+        SAMPLER(sampler_MainTex);
+        ENDHLSL
+
+        Pass
+        {
+            Name "ForwardLit"
+            Tags { "LightMode" = "UniversalForward" }
+
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fog
+            #pragma shader_feature_local RETRO_UNLIT
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float3 affineUV : TEXCOORD1;
+                float3 positionWS : TEXCOORD2;
+                half3 diffuse : TEXCOORD3;
+                half3 ambient : TEXCOORD4;
+                half fogFactor : TEXCOORD5;
+            };
+
+            Varyings vert(Attributes v)
+            {
+                Varyings o;
+                VertexPositionInputs pos = GetVertexPositionInputs(v.positionOS.xyz);
+                o.positionCS = RetroSnapVertex(pos.positionCS, _VertexSnapOverride);
+                o.positionWS = pos.positionWS;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.affineUV = RetroAffineUV(o.uv, o.positionCS);
+                o.diffuse = 0;
+                o.ambient = 1;
+
+            #ifndef RETRO_UNLIT
+                float3 normalWS = TransformObjectToWorldNormal(v.normalOS);
+                Light mainLight = GetMainLight();
+                o.diffuse = mainLight.color * saturate(dot(normalWS, mainLight.direction));
+                o.ambient = SampleSH(normalWS);
+                #if defined(_ADDITIONAL_LIGHTS_VERTEX) || defined(_ADDITIONAL_LIGHTS)
+                uint count = GetAdditionalLightsCount();
+                for (uint i = 0u; i < count; i++)
+                {
+                    Light light = GetAdditionalLight(i, pos.positionWS);
+                    o.ambient += light.color * light.distanceAttenuation * saturate(dot(normalWS, light.direction));
+                }
+                #endif
+            #endif
+
+                o.fogFactor = ComputeFogFactor(o.positionCS.z);
+                return o;
+            }
+
+            half4 frag(Varyings i) : SV_Target
+            {
+                float2 uv = RetroResolveUV(i.uv, i.affineUV, _MainTex_TexelSize);
+                half4 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv) * _Color;
+            #ifdef RETRO_UNLIT
+                half3 lit = albedo.rgb;
+            #else
+                half shadow = MainLightRealtimeShadow(TransformWorldToShadowCoord(i.positionWS));
+                half3 lit = albedo.rgb * (i.diffuse * shadow + i.ambient);
+            #endif
+                half3 col = MixFog(lit + _EmissionColor.rgb, i.fogFactor);
+                return half4(col, albedo.a);
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "ShadowCaster"
+            Tags { "LightMode" = "ShadowCaster" }
+            ZWrite On
+            ZTest LEqual
+            ColorMask 0
+
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+
+            float3 _LightDirection;
+            float3 _LightPosition;
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+            };
+
+            float4 vert(Attributes v) : SV_POSITION
+            {
+                float3 positionWS = TransformObjectToWorld(v.positionOS.xyz);
+                float3 normalWS = TransformObjectToWorldNormal(v.normalOS);
+            #if _CASTING_PUNCTUAL_LIGHT_SHADOW
+                float3 lightDir = normalize(_LightPosition - positionWS);
+            #else
+                float3 lightDir = _LightDirection;
+            #endif
+                float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDir));
+            #if UNITY_REVERSED_Z
+                positionCS.z = min(positionCS.z, UNITY_NEAR_CLIP_VALUE);
+            #else
+                positionCS.z = max(positionCS.z, UNITY_NEAR_CLIP_VALUE);
+            #endif
+                return positionCS;
+            }
+
+            half4 frag() : SV_Target { return 0; }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "DepthOnly"
+            Tags { "LightMode" = "DepthOnly" }
+            ZWrite On
+            ColorMask R
+
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            float4 vert(float4 positionOS : POSITION) : SV_POSITION
+            {
+                return RetroSnapVertex(TransformObjectToHClip(positionOS.xyz), _VertexSnapOverride);
+            }
+
+            half frag() : SV_Target { return 0; }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "DepthNormals"
+            Tags { "LightMode" = "DepthNormals" }
+            ZWrite On
+
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float3 normalWS : TEXCOORD0;
+            };
+
+            Varyings vert(float4 positionOS : POSITION, float3 normalOS : NORMAL)
+            {
+                Varyings o;
+                o.positionCS = RetroSnapVertex(TransformObjectToHClip(positionOS.xyz), _VertexSnapOverride);
+                o.normalWS = TransformObjectToWorldNormal(normalOS);
+                return o;
+            }
+
+            half4 frag(Varyings i) : SV_Target
+            {
+                return half4(NormalizeNormalPerPixel(i.normalWS), 0);
+            }
+            ENDHLSL
+        }
+    }
+
     SubShader
     {
         Tags { "RenderType" = "Opaque" "Queue" = "Geometry" }

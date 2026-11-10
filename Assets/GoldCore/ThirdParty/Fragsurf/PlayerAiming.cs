@@ -46,8 +46,9 @@ public class PlayerAiming : MonoBehaviour
 		DecayPunchAngle();
 
 		// Input
-		float xMovement = Input.GetAxisRaw("Mouse X") * horizontalSensitivity * sensitivityMultiplier;
-		float yMovement = -Input.GetAxisRaw("Mouse Y") * verticalSensitivity  * sensitivityMultiplier;
+		Vector2 lookInput = GoldCore.GameInput.Look;
+		float xMovement = lookInput.x * horizontalSensitivity * sensitivityMultiplier;
+		float yMovement = -lookInput.y * verticalSensitivity  * sensitivityMultiplier;
 
 		// Calculate real rotation from input
 		realRotation   = new Vector3(Mathf.Clamp(realRotation.x + yMovement, minYRotation, maxYRotation), realRotation.y + xMovement, realRotation.z);

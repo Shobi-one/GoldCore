@@ -4,12 +4,13 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.InputSystem;
 using Fragsurf.Movement;
 
 namespace GoldCore
 {
     /// <summary>
-    /// The developer console (toggle with the Console button, ~ by default).
+    /// The developer console. Toggle it with the key left of 1 (` on US layouts) or F1.
     /// Commands are registered with <see cref="Register"/>; the ConVar system in the console phase
     /// will build on this.
     /// </summary>
@@ -59,9 +60,11 @@ namespace GoldCore
             if (GameInput.ConsolePressed) Toggle();
             if (!consoleActive) return;
 
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) ExecuteCommand();
-            else if (Input.GetKeyDown(KeyCode.UpArrow)) BrowseHistory(-1);
-            else if (Input.GetKeyDown(KeyCode.DownArrow)) BrowseHistory(1);
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null) return;
+            if (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame) ExecuteCommand();
+            else if (keyboard.upArrowKey.wasPressedThisFrame) BrowseHistory(-1);
+            else if (keyboard.downArrowKey.wasPressedThisFrame) BrowseHistory(1);
         }
 
         public void Open()
