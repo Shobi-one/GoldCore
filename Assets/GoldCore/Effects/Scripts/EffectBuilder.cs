@@ -18,7 +18,7 @@ namespace GoldCore
         static readonly int AdditiveId = Shader.PropertyToID("_Additive");
 
         static Shader shader;
-        static readonly Dictionary<string, Material> materials = new Dictionary<string, Material>();
+        static readonly Dictionary<(string, Texture2D), Material> materials = new Dictionary<(string, Texture2D), Material>();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStatics()
@@ -140,12 +140,13 @@ namespace GoldCore
         public static Material MaterialFor(EffectLayer l)
         {
             Texture2D tex = l.shape == ParticleShape.Texture ? l.texture : null;
-            string key = $"{(int)l.shape}|{(int)l.blend}|{l.intensity:0.###}|{l.pixelate}|{(tex != null ? tex.GetInstanceID() : 0)}";
+            // Keyed by the texture itself: GetInstanceID is obsolete in newer Unity 6 releases.
+            var key = ($"{(int)l.shape}|{(int)l.blend}|{l.intensity:0.###}|{l.pixelate}", tex);
             if (materials.TryGetValue(key, out Material cached) && cached != null) return cached;
 
             if (shader == null) shader = Shader.Find(ShaderName);
             if (shader == null) shader = Shader.Find(FallbackShader);
-            var mat = new Material(shader) { name = "GoldCore Particle " + key, hideFlags = HideFlags.DontSave };
+            var mat = new Material(shader) { name = "GoldCore Particle " + key.Item1, hideFlags = HideFlags.DontSave };
             mat.SetFloat(ShapeId, (float)l.shape);
             mat.SetFloat(IntensityId, l.intensity);
             mat.SetFloat(PixelateId, l.pixelate);
