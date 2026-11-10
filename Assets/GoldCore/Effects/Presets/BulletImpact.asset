@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e939b7472046e49cff71c4f93df38e, type: 3}
+  m_Name: BulletImpact
+  m_EditorClassIdentifier: 
+  loop: 0
+  scale: 1
+  maxInstances: 32
+  layers:
+  - name: Puff
+    enabled: 1
+    shape: 3
+    blend: 1
+    texture: {fileID: 0}
+    startColor: {r: 0.5, g: 0.47, b: 0.43, a: 0.7}
+    endColor: {r: 0.6, g: 0.58, b: 0.55, a: 0}
+    intensity: 1
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 4
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.4
+      max: 0.8
+    speed:
+      min: 0.5
+      max: 1.5
+    size:
+      min: 0.1
+      max: 0.2
+    endSize: 3
+    spin:
+      min: -45
+      max: 45
+    randomRotation: 1
+    gravity: 0
+    drag: 3
+    bounce: 0
+    emitter: 3
+    radius: 0.02
+    coneAngle: 25
+  - name: Sparks
+    enabled: 1
+    shape: 4
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.85, b: 0.5, a: 1}
+    endColor: {r: 1, g: 0.4, b: 0.1, a: 0}
+    intensity: 2.5
+    pixelate: 0
+    stretch: 1
+    stretchAmount: 0.03
+    burst: 6
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.15
+      max: 0.35
+    speed:
+      min: 3
+      max: 7
+    size:
+      min: 0.02
+      max: 0.035
+    endSize: 1
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: 0.8
+    drag: 0
+    bounce: 0
+    emitter: 3
+    radius: 0.01
+    coneAngle: 40
+  - name: Chips
+    enabled: 1
+    shape: 5
+    blend: 1
+    texture: {fileID: 0}
+    startColor: {r: 0.3, g: 0.28, b: 0.25, a: 1}
+    endColor: {r: 0.3, g: 0.28, b: 0.25, a: 0}
+    intensity: 1
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 5
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.4
+      max: 0.7
+    speed:
+      min: 2
+      max: 4
+    size:
+      min: 0.015
+      max: 0.03
+    endSize: 1
+    spin:
+      min: -360
+      max: 360
+    randomRotation: 1
+    gravity: 1.5
+    drag: 0
+    bounce: 0
+    emitter: 3
+    radius: 0.01
+    coneAngle: 35
+  flash: 0
+  flashColor: {r: 1, g: 0.7, b: 0.4, a: 1}
+  flashIntensity: 4
+  flashRange: 6
+  flashDuration: 0.15
+  shake: 0
+  shakeRadius: 15
+  sounds: []
+  volume: 1
+  pitch:
+    min: 0.95
+    max: 1.05
+  soundRange: 40

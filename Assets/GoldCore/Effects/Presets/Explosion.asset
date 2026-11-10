@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e939b7472046e49cff71c4f93df38e, type: 3}
+  m_Name: Explosion
+  m_EditorClassIdentifier: 
+  loop: 0
+  scale: 1
+  maxInstances: 12
+  layers:
+  - name: Flash
+    enabled: 1
+    shape: 0
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.9, b: 0.6, a: 1}
+    endColor: {r: 1, g: 0.5, b: 0.1, a: 0}
+    intensity: 4
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 1
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.12
+      max: 0.15
+    speed:
+      min: 0
+      max: 0
+    size:
+      min: 3
+      max: 3.5
+    endSize: 1.5
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: 0
+    drag: 0
+    bounce: 0
+    emitter: 0
+    radius: 0.1
+    coneAngle: 25
+  - name: Fireball
+    enabled: 1
+    shape: 3
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.6, b: 0.2, a: 1}
+    endColor: {r: 0.6, g: 0.1, b: 0, a: 0}
+    intensity: 2.5
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 18
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.35
+      max: 0.6
+    speed:
+      min: 2
+      max: 5
+    size:
+      min: 0.8
+      max: 1.4
+    endSize: 1.8
+    spin:
+      min: -90
+      max: 90
+    randomRotation: 1
+    gravity: 0
+    drag: 3
+    bounce: 0
+    emitter: 1
+    radius: 0.3
+    coneAngle: 25
+  - name: Smoke
+    enabled: 1
+    shape: 3
+    blend: 1
+    texture: {fileID: 0}
+    startColor: {r: 0.25, g: 0.23, b: 0.22, a: 0.8}
+    endColor: {r: 0.4, g: 0.4, b: 0.4, a: 0}
+    intensity: 1
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 12
+    rate: 0
+    delay: 0.05
+    lifetime:
+      min: 1.2
+      max: 2.2
+    speed:
+      min: 1
+      max: 3
+    size:
+      min: 1
+      max: 1.6
+    endSize: 2.5
+    spin:
+      min: -30
+      max: 30
+    randomRotation: 1
+    gravity: -0.05
+    drag: 1.5
+    bounce: 0
+    emitter: 1
+    radius: 0.4
+    coneAngle: 25
+  - name: Sparks
+    enabled: 1
+    shape: 4
+    blend: 0
+    texture: {fileID: 0}
+    startColor: {r: 1, g: 0.8, b: 0.4, a: 1}
+    endColor: {r: 1, g: 0.3, b: 0, a: 0}
+    intensity: 3
+    pixelate: 0
+    stretch: 1
+    stretchAmount: 0.04
+    burst: 30
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.4
+      max: 0.9
+    speed:
+      min: 8
+      max: 16
+    size:
+      min: 0.04
+      max: 0.07
+    endSize: 1
+    spin:
+      min: 0
+      max: 0
+    randomRotation: 1
+    gravity: 1
+    drag: 0.5
+    bounce: 1
+    emitter: 1
+    radius: 0.1
+    coneAngle: 25
+  - name: Debris
+    enabled: 1
+    shape: 5
+    blend: 1
+    texture: {fileID: 0}
+    startColor: {r: 0.15, g: 0.12, b: 0.1, a: 1}
+    endColor: {r: 0.1, g: 0.08, b: 0.06, a: 0}
+    intensity: 1
+    pixelate: 0
+    stretch: 0
+    stretchAmount: 0.05
+    burst: 10
+    rate: 0
+    delay: 0
+    lifetime:
+      min: 0.8
+      max: 1.4
+    speed:
+      min: 5
+      max: 10
+    size:
+      min: 0.06
+      max: 0.14
+    endSize: 1
+    spin:
+      min: -360
+      max: 360
+    randomRotation: 1
+    gravity: 1.5
+    drag: 0
+    bounce: 1
+    emitter: 2
+    radius: 0.2
+    coneAngle: 25
+  flash: 1
+  flashColor: {r: 1, g: 0.65, b: 0.3, a: 1}
+  flashIntensity: 8
+  flashRange: 12
+  flashDuration: 0.3
+  shake: 0.6
+  shakeRadius: 20
+  sounds: []
+  volume: 1
+  pitch:
+    min: 0.95
+    max: 1.05
+  soundRange: 40

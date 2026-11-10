@@ -14,7 +14,9 @@ namespace GoldCore
         [Tooltip("Decal placed where a bullet or melee hit lands, such as a bullet hole.")]
         public GameObject impactDecal;
         [Min(0f)] public float decalLifetime = 10f;
-        [Tooltip("Particle effect spawned at the hit, facing out of the surface.")]
+        [Tooltip("GoldCore effect played at the hit, spraying out of the surface: sparks for metal, dust for concrete.")]
+        public EffectPreset impactPreset;
+        [Tooltip("Optional prefab spawned at the hit as well, facing out of the surface.")]
         public GameObject impactEffect;
         public AudioClip[] impactSounds;
 

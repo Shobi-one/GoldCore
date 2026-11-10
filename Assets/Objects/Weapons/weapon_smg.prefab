@@ -229,6 +229,9 @@ MonoBehaviour:
   gunSound: {fileID: 0}
   muzzleFlash: {fileID: 1854139948102831337, guid: 80ee81857497a9c4886e9ed15cf4bcf0, type: 3}
   bulletHoleGraphic: {fileID: 7966517366184973563, guid: fe3af64f3a6ccc14897cc56e7174661a, type: 3}
+  muzzleEffect: {fileID: 11400000, guid: 51b2f9b162f4450c81f96d15009a2bc1, type: 2}
+  impactEffect: {fileID: 11400000, guid: 7bc3e23592ee4bd8b5678ab657c2cd87, type: 2}
+  bloodEffect: {fileID: 11400000, guid: e89fb580ad3c426889167840ce219a21, type: 2}
   camShakeMagnitude: 0
   camShakeDuration: 0
   currentMag: {fileID: 0}

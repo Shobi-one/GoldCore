@@ -76,7 +76,6 @@ namespace GoldCore.EditorTools
             foreach (string guid in AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" }))
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
-                if (path.StartsWith("Assets/UnityTechnologies")) continue;
                 GameObject root = PrefabUtility.LoadPrefabContents(path);
                 int count = StackIn(root.GetComponentsInChildren<Camera>(true));
                 if (count > 0)

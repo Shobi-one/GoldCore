@@ -19,6 +19,7 @@ See the [framework plan](https://claude.ai/artifact/R5AVBXxVVHqD5kF9Gun8je) for 
 | `Runtime/Physics` | Carry and throw props with the use key |
 | `Runtime/NPC` | `EnemyAI` (melee) and `EnforcerAI` (ranged), both using `Health` |
 | `Runtime/Console` | Developer console: `help`, `map`, `maps`, `impulse 101`, `god`, `kill`, `sv_autobunnyhop`, `clear`, `quit`, history with the arrow keys |
+| `Effects` | Particle effects as editable presets (explosion, muzzle flash, impacts, blood, fire, smoke and more), pooled, with a light flash, camera shake and sound. See its README |
 | `RetroFX` | PS1, N64, PS2 and Modern looks. See its README |
 | `ThirdParty/Fragsurf` | Source-style movement (bhop, air strafing, ladders, water) by Ole Ellefsen Farner, MIT licensed, with GoldCore changes |
 
@@ -56,5 +57,6 @@ of its parents. To react, hook up `onDamaged`, `onDeath` or `onChanged` in the I
 
 ## Surfaces
 
-Create a Surface Property (Assets > Create > GoldCore > Surface Property), give it a decal and sounds,
-and put a `SurfaceTag` on the object. Surfaces without a tag still get the weapon's own bullet hole.
+Create a Surface Property (Assets > Create > GoldCore > Surface Property), give it a decal, an impact
+effect and sounds, and put a `SurfaceTag` on the object. Surfaces without a tag still get the weapon's
+own bullet hole and impact effect.

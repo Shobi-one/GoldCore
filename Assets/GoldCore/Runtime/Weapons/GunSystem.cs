@@ -42,7 +42,15 @@ namespace GoldCore
         public Image hudImage;
         // bulletHoleGraphic is used on surfaces that have no SurfaceTag.
         public GameObject muzzleFlash, bulletHoleGraphic, bloodDecalPrefab;
-        public float camShakeMagnitude, camShakeDuration;
+        [Tooltip("GoldCore effect played at the attack point on every shot. Used instead of Muzzle Flash when set.")]
+        public EffectPreset muzzleEffect;
+        [Tooltip("GoldCore effect for hits on surfaces with no SurfaceTag.")]
+        public EffectPreset impactEffect;
+        [Tooltip("GoldCore effect for hits on things that take damage.")]
+        public EffectPreset bloodEffect;
+        [Tooltip("Camera shake per shot, 0 to 1.")]
+        public float camShakeMagnitude;
+        [HideInInspector] public float camShakeDuration;
 
         [Header("References")]
         public GameObject gun;
@@ -162,8 +170,12 @@ namespace GoldCore
 
         private void SpawnMuzzleFlash()
         {
-            if (muzzleFlash == null || attackPoint == null) return;
-            Destroy(Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation), 0.05f);
+            if (camShakeMagnitude > 0f) CameraShake.AddGlobal(camShakeMagnitude);
+            if (attackPoint == null) return;
+            if (muzzleEffect != null)
+                Effects.Play(muzzleEffect, attackPoint.position, attackPoint.rotation, attackPoint);
+            else if (muzzleFlash != null)
+                Destroy(Instantiate(muzzleFlash, attackPoint.position, attackPoint.rotation), 0.05f);
         }
 
         private static Vector3 ApplySpread(Vector3 direction, float spread) =>
@@ -179,9 +191,14 @@ namespace GoldCore
             };
 
             if (Damage.Apply(hit.collider, info))
+            {
                 CreateBloodDecal(hit);
+                if (bloodEffect != null) Effects.Play(bloodEffect, hit);
+            }
             else
-                Impacts.Spawn(hit, bulletHoleGraphic, 3f);
+            {
+                Impacts.Spawn(hit, bulletHoleGraphic, 3f, impactEffect);
+            }
         }
 
         private void CreateBloodDecal(RaycastHit hit)
