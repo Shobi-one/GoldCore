@@ -24,7 +24,7 @@ See the [framework plan](https://claude.ai/artifact/R5AVBXxVVHqD5kF9Gun8je) for 
 
 ## Setup
 
-GoldCore targets Unity 6 with URP and the Input System package.
+GoldCore targets Unity 6000.6 with URP and the Input System package.
 
 1. Convert the project with **Window > Rendering > Render Pipeline Converter** (Built-in to URP).
 2. Run **Tools > GoldCore > Set Up URP**. It adds RetroFX to the URP renderers and stacks the Player's
